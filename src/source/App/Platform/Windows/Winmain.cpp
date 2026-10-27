@@ -1449,9 +1449,10 @@ bool RouteActionInput(SDL_Event& event, bool synthetic, bool& propagates)
         if (event.key.scancode == SDL_SCANCODE_F10 && !event.key.repeat)
             CameraManager::Instance().ToggleZoomLock();
 #else
-        // Synthetic SDL events do not generate the Win32 messages that handle
-        // these system keys for physical input.
-        if (synthetic && event.key.scancode == SDL_SCANCODE_RETURN)
+        // SDL reliably distinguishes both Enter keys. Some Windows layouts do
+        // not produce the WM_CHAR which the legacy path expected, so handle
+        // physical and synthetic presses here.
+        if (event.key.scancode == SDL_SCANCODE_RETURN || event.key.scancode == SDL_SCANCODE_KP_ENTER)
             SetEnterPressed(true);
         if (synthetic && event.key.scancode == SDL_SCANCODE_F10 && !event.key.repeat)
             CameraManager::Instance().ToggleZoomLock();

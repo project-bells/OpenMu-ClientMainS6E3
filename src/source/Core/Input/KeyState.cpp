@@ -10,6 +10,23 @@ namespace Core::Input
     {
         bool g_leftMouseButtonPressEdge = false;
 
+        bool IsScancodeDown(SDL_Scancode scancode)
+        {
+            const bool* state = SDL_GetKeyboardState(nullptr);
+            return state != nullptr && state[scancode];
+        }
+
+        SDL_Scancode DigitToNumpadScancode(int virtualKey)
+        {
+            if (virtualKey == '0') return SDL_SCANCODE_KP_0;
+            if (virtualKey >= '1' && virtualKey <= '9')
+            {
+                return static_cast<SDL_Scancode>(SDL_SCANCODE_KP_1 + (virtualKey - '1'));
+            }
+
+            return SDL_SCANCODE_UNKNOWN;
+        }
+
 #ifdef _EDITOR
         OtherWindowQuery g_otherWindowQuery = nullptr;
 #endif
@@ -100,14 +117,19 @@ namespace Core::Input
         case VK_SHIFT:   return (SDL_GetModState() & SDL_KMOD_SHIFT) != 0;
         case VK_CONTROL: return (SDL_GetModState() & SDL_KMOD_CTRL) != 0;
         case VK_MENU:    return (SDL_GetModState() & SDL_KMOD_ALT) != 0;
+        case VK_RETURN:  return IsScancodeDown(SDL_SCANCODE_RETURN) || IsScancodeDown(SDL_SCANCODE_KP_ENTER);
         default: break;
         }
 
         const SDL_Scancode sc = VkToScancode(virtualKey);
         if (sc == SDL_SCANCODE_UNKNOWN) return false;
 
-        const bool* state = SDL_GetKeyboardState(nullptr);
-        return state != nullptr && state[sc];
+        if (virtualKey >= '0' && virtualKey <= '9')
+        {
+            return IsScancodeDown(sc) || IsScancodeDown(DigitToNumpadScancode(virtualKey));
+        }
+
+        return IsScancodeDown(sc);
     }
 
 #ifdef _EDITOR
