@@ -77,7 +77,8 @@ internal static class Program
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
                 var temporary = destination + ".download";
-                await File.WriteAllBytesAsync(temporary, await client.GetByteArrayAsync(new Uri(new Uri(manifest.BaseUrl), file.Path)));
+                var downloadUri = VersionedDownloadUri(manifest.BaseUrl, file);
+                await File.WriteAllBytesAsync(temporary, await client.GetByteArrayAsync(downloadUri));
                 if (!string.Equals(await HashAsync(temporary), file.Sha256, StringComparison.OrdinalIgnoreCase))
                     throw new InvalidDataException($"SHA-256 ไม่ตรง: {file.Path}");
                 File.Move(temporary, destination, true);
@@ -148,5 +149,15 @@ internal static class Program
     {
         await using var stream = File.OpenRead(path);
         return Convert.ToHexString(await SHA256.HashDataAsync(stream));
+    }
+
+    private static Uri VersionedDownloadUri(string baseUrl, UpdateFile file)
+    {
+        var fileUri = new Uri(new Uri(baseUrl), file.Path);
+        var builder = new UriBuilder(fileUri)
+        {
+            Query = $"sha256={Uri.EscapeDataString(file.Sha256)}"
+        };
+        return builder.Uri;
     }
 }
