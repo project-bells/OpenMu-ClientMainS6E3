@@ -1228,6 +1228,7 @@ void HandleFocusChange(bool active)
             MouseMButtonPush = false;
             MouseWheel = 0;
             Core::Input::ClearLeftMouseButtonPressEdge();
+            Core::Input::ClearEnterPressEdge();
         }
     }
     else
@@ -1441,6 +1442,11 @@ bool RouteActionInput(SDL_Event& event, bool synthetic, bool& propagates)
         return true;
     case SDL_EVENT_KEY_DOWN:
         propagates = Core::Input::RouteToUi(event, g_sdlWindow);
+        if (!event.key.repeat
+            && (event.key.scancode == SDL_SCANCODE_RETURN || event.key.scancode == SDL_SCANCODE_KP_ENTER))
+        {
+            Core::Input::RecordEnterPressEdge();
+        }
 #if !defined(_WIN32)
         // Physical Windows messages already handle these keys; SDL-only paths
         // (and Windows synthetic events below) must handle them here instead.

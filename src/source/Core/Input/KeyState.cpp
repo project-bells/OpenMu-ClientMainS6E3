@@ -9,6 +9,7 @@ namespace Core::Input
     namespace
     {
         bool g_leftMouseButtonPressEdge = false;
+        bool g_enterPressEdge = false;
 
         bool IsScancodeDown(SDL_Scancode scancode)
         {
@@ -86,6 +87,16 @@ namespace Core::Input
         g_leftMouseButtonPressEdge = false;
     }
 
+    void RecordEnterPressEdge()
+    {
+        g_enterPressEdge = true;
+    }
+
+    void ClearEnterPressEdge()
+    {
+        g_enterPressEdge = false;
+    }
+
     bool IsKeyDown(int virtualKey)
     {
         // A scripted press (control socket) counts as down for the frame it
@@ -117,7 +128,8 @@ namespace Core::Input
         case VK_SHIFT:   return (SDL_GetModState() & SDL_KMOD_SHIFT) != 0;
         case VK_CONTROL: return (SDL_GetModState() & SDL_KMOD_CTRL) != 0;
         case VK_MENU:    return (SDL_GetModState() & SDL_KMOD_ALT) != 0;
-        case VK_RETURN:  return IsScancodeDown(SDL_SCANCODE_RETURN) || IsScancodeDown(SDL_SCANCODE_KP_ENTER);
+        case VK_RETURN:
+            return g_enterPressEdge || IsScancodeDown(SDL_SCANCODE_RETURN) || IsScancodeDown(SDL_SCANCODE_KP_ENTER);
         default: break;
         }
 

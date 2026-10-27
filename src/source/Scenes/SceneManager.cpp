@@ -92,12 +92,13 @@ extern bool g_LastAnimationWasParallel;
 
 namespace
 {
-    void ClearMousePressState()
+    void ClearInputPressState()
     {
         MouseLButtonPush = false;
         MouseRButtonPush = false;
         MouseMButtonPush = false;
         Core::Input::ClearLeftMouseButtonPressEdge();
+        Core::Input::ClearEnterPressEdge();
     }
 }
 
@@ -1254,5 +1255,5 @@ void RenderScene(HDC hDC)
 
     // SDL may deliver button-down and button-up in one event batch. Keep these
     // one-shot flags alive until scene logic has consumed the rendered frame.
-    ClearMousePressState();
+    ClearInputPressState();
 }

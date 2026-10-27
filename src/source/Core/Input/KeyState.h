@@ -7,6 +7,8 @@ namespace Core::Input
 SDL_Scancode VkToScancode(int virtualKey);
 void RecordLeftMouseButtonPressEdge();
 void ClearLeftMouseButtonPressEdge();
+void RecordEnterPressEdge();
+void ClearEnterPressEdge();
 
 // Portable replacement for the Win32 "is this key currently down" check
 // (HIBYTE(GetAsyncKeyState(vk)) == 128 / & 0x8000), backed by SDL keyboard
