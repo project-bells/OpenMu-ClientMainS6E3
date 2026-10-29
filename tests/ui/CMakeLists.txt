@@ -59,8 +59,9 @@ mu_add_test(
 
 mu_add_test(
     NAME item_data_tests
-    SOURCES test_item_data.cpp
-    LINK_LIBS MuClient
+    SOURCES
+        test_item_data.cpp
+        ${CMAKE_SOURCE_DIR}/src/source/UI/Inventory/ItemDataParser.cpp
 )
 
 mu_add_test(

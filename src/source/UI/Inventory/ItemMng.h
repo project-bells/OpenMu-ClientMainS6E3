@@ -9,41 +9,7 @@
 #include <span>
 
 #include "Core/Time/Timer.h"
-
-struct ItemCreationParams
-{
-    int Group;
-    int Number;
-    BYTE Level;
-    BYTE Durability;
-    bool WithLuck;
-    bool WithSkill;
-
-    bool WithOption;
-    BYTE OptionLevel;
-    BYTE OptionType;
-
-    bool HasExcellentOption;
-    BYTE ExcellentFlags;
-
-    bool IsAncient;
-    BYTE AncientDiscriminator;
-    BYTE AncientBonusOption;
-
-    bool HasHarmonyOption;
-    BYTE HarmonyOptionType;
-    BYTE HarmonyOptionLevel;
-
-    bool HasGuardianOption;
-    BYTE SocketCount;
-    BYTE SocketOptions[MAX_SOCKETS];
-    BYTE SocketBonusOption;
-
-    bool WithExpiration;
-    bool IsExpired;
-};
-
-ItemCreationParams ParseItemData(std::span<const BYTE> itemData);
+#include "UI/Inventory/ItemDataParser.h"
 
 namespace mu::ui::window
 {
