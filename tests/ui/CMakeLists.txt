@@ -58,6 +58,12 @@ mu_add_test(
 )
 
 mu_add_test(
+    NAME item_data_tests
+    SOURCES test_item_data.cpp
+    LINK_LIBS MuClient
+)
+
+mu_add_test(
     NAME tooltip_placement_tests
     SOURCES
         test_tooltip_placement.cpp
